@@ -178,14 +178,7 @@ var countdown = (function() {
     }
 })()
 
-countdown.deploy({
-    $el:$(".countdown"),
-    date:'2017/12/12 12:12:12',
-    format:'%Y 年 %m 月 %n 日 %H 小时 %M 分钟 %S 秒',       // 倒计时格式 时间设置中间可以写html
-    endcallback:function () {           // endcallback 结束时执行的函数  fixcallback(600) 剩余600秒时执行的函数
-        console.log('aa')
-    }
-})
+
 
 
 /*
