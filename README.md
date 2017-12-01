@@ -5,6 +5,7 @@
 
 ### 使用方法：
 
+```
 countdown.deploy({
     $el:$(".countdown"),
     date:'2017/12/12 12:12:12',
@@ -13,6 +14,7 @@ countdown.deploy({
         console.log('aa')
     }
 })
+```
 
 
 
