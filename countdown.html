@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		.countdown {
+			border: 1px solid red;
+		}
+	</style>
+</head>
+<body>
+	<div class="countdown"></div>
+	<div id="getting-started1"></div>
+</body>
+<script src="./jquery-3.1.1.js"></script>
+<script src="./countdown.js"></script>
+<script src="./jquery.countdown.min.js"></script>
+<script>
+    $("#getting-started1")
+        .countdown("2017/12/12 12:12:12",function(event) {
+            $(this).html(
+                event.strftime('%Y 年 %m 月 %n 日 %H 小时 %M 分钟 %S 秒')
+            );
+            $('.jj').css('color','red')
+        });
+</script>
+</html>
