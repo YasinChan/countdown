@@ -18,8 +18,9 @@ countdown.deploy({
 
 
 
-format 写法：
+### format 写法：
 
+```
  %Y %m %W %d %H %M %S   剩余的 年 月 周 日 时 分 秒
  %Y %m $n %H %M %S   剩余的 年 月 日 时 分 秒
 
@@ -29,6 +30,6 @@ format 写法：
  %I %M %S   剩余的 时 分 秒
  %N %S   剩余的 分 秒
  %T    剩余的 秒
-
+```
 
 
