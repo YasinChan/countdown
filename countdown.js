@@ -13,29 +13,28 @@
 var countdown = (function() {
     "use strict";
 
-    function _countdown($el,date, format, callback){
+    function _countdown($el,date,format,dateType,leadTime, callback){
         this.$el = $el;
         this.date = date;
         this.format = format;
+        this.dateType = dateType==undefined?'localDate':dateType;
+        this.leadTime = leadTime==undefined?0:leadTime;
         this.callback = callback;
         this.init();
-        this.bind();
     }
 
     _countdown.prototype= {
         init: function () {
+            this.interval = null
             this.standardDate = this.parseDate(this.date)  // 解析后的时间
             this.currentDate = this.getCurrentDate()       // 获取服务器时间
             this.totalSecTime = this.getTime(this.currentDate,this.standardDate) // 获取倒计时总共的秒数
             this.distributeTime = this.getDistributeTime(this.totalSecTime)   // 分配时间，用以组合。
             this.formatHtml = this.getFormatHtml(this.format)   // 配置倒计时的 html 赋给 this.format
-            this.setFormatHtml(this.formatHtml)
-            this._setInterval()
+            this.setFormatHtml(this.formatHtml)     // 画html
+            this._setInterval()    // 倒计时函数
         },
 
-        bind : function () {
-
-        },
 
         parseDate: function (date) {  // 这个函数来源于 Jquery.countdown.js
             var matchers = [];
@@ -61,7 +60,11 @@ var countdown = (function() {
         },
 
         getCurrentDate: function () {
-            return new Date($.ajax({async: false}).getResponseHeader("Date"));
+            if(this.dateType == 'localDate') {
+                return new Date()
+            }else {
+                return new Date($.ajax({async: false}).getResponseHeader("Date"));
+            }
         },
 
         getTime: function (currentDate, setDate) {
@@ -92,46 +95,47 @@ var countdown = (function() {
         getFormatHtml: function (format) {
             var directives = format.match(/%(-|!)?[A-Z]{1}(:[^;]+;)?/gi);
             var _formatHtml = this.format;
+            var timeObj = this.distributeTime;
             for(var i=0; i<directives.length; i++) {
                 switch (directives[i]) {
                     case '%Y':
-                        _formatHtml = _formatHtml.replace('%Y', this.distributeTime.years);
+                        _formatHtml = _formatHtml.replace('%Y', timeObj.years<10?'0'+timeObj.years:timeObj.years);
                         break;
                     case '%m':
-                        _formatHtml = _formatHtml.replace('%m', this.distributeTime.months);
+                        _formatHtml = _formatHtml.replace('%m', timeObj.months<10?'0'+timeObj.months:timeObj.months);
                         break;
                     case '%n':
-                        _formatHtml = _formatHtml.replace('%n', this.distributeTime.daysToMonth);
+                        _formatHtml = _formatHtml.replace('%n', timeObj.daysToMonth<10?'0'+timeObj.daysToMonth:timeObj.daysToMonth);
                         break;
                     case '%w':
-                        _formatHtml = _formatHtml.replace('%w', this.distributeTime.weeks);
+                        _formatHtml = _formatHtml.replace('%w', timeObj.weeks<10?'0'+timeObj.weeks:timeObj.weeks);
                         break;
                     case '%W':
-                        _formatHtml = _formatHtml.replace('%W', this.distributeTime.daysToWeek);
+                        _formatHtml = _formatHtml.replace('%W', timeObj.daysToWeek<10?'0'+timeObj.daysToWeek:timeObj.daysToWeek);
                         break;
                     case '%d':
-                        _formatHtml = _formatHtml.replace('%d', this.distributeTime.days);
+                        _formatHtml = _formatHtml.replace('%d', timeObj.days<10?'0'+timeObj.days:timeObj.days);
                         break;
                     case '%H':
-                        _formatHtml = _formatHtml.replace('%H', this.distributeTime.hours);
+                        _formatHtml = _formatHtml.replace('%H', timeObj.hours<10?'0'+timeObj.hours:timeObj.hours);
                         break;
                     case '%M':
-                        _formatHtml = _formatHtml.replace('%M', this.distributeTime.minutes);
+                        _formatHtml = _formatHtml.replace('%M', timeObj.minutes<10?'0'+timeObj.minutes:timeObj.minutes);
                         break;
                     case '%S':
-                        _formatHtml = _formatHtml.replace('%S', this.distributeTime.seconds);
+                        _formatHtml = _formatHtml.replace('%S', timeObj.seconds<10?'0'+timeObj.seconds:timeObj.seconds);
                         break;
                     case '%D':
-                        _formatHtml = _formatHtml.replace('%D', this.distributeTime.totalDays);
+                        _formatHtml = _formatHtml.replace('%D', timeObj.totalDays<10?'0'+timeObj.totalDays:timeObj.totalDays);
                         break;
                     case '%I':
-                        _formatHtml = _formatHtml.replace('%I', this.distributeTime.totalHours);
+                        _formatHtml = _formatHtml.replace('%I', timeObj.totalHours<10?'0'+timeObj.totalHours:timeObj.totalHours);
                         break;
                     case '%N':
-                        _formatHtml = _formatHtml.replace('%N', this.distributeTime.totalMinutes);
+                        _formatHtml = _formatHtml.replace('%N', timeObj.totalMinutes<10?'0'+timeObj.totalMinutes:timeObj.totalMinutes);
                         break;
                     case '%T':
-                        _formatHtml = _formatHtml.replace('%T', this.totalSecTime);
+                        _formatHtml = _formatHtml.replace('%T', this.totalSecTime<10?'0'+this.totalSecTime:this.totalSecTime);
                         break;
                 }
             }
@@ -142,42 +146,52 @@ var countdown = (function() {
             this.$el.html(format);
         },
 
-        updateCountdown: function () {
-            var _this = this;
-      
-                _this.totalSecTime -= 1;
-                _this.distributeTime = _this.getDistributeTime(_this.totalSecTime)   // 分配时间，用以组合。
-                _this.formatHtml = _this.getFormatHtml(_this.format)   // 配置倒计时的 html 赋给 this.format
-                _this.setFormatHtml(_this.formatHtml)
-         
-
-
-
-        },
         _setInterval: function(){
             var _this = this
-            setInterval(function(){
+            this.interval = setInterval(function(){
+
                 _this.updateCountdown()
+
             },1000)
+        },
+
+        updateCountdown: function () {
+
+            if(this.totalSecTime == this.leadTime) {
+                if(this.callback != undefined) {
+                    this.callback();
+                    this.totalSecTime = this.getTime(this.getCurrentDate(),this.standardDate)
+                }
+            }
+            if(this.totalSecTime == 0) {
+                clearInterval(this.interval)
+                return
+            }
+            this.totalSecTime -= 1;
+            this.distributeTime = this.getDistributeTime(this.totalSecTime)
+            this.formatHtml = this.getFormatHtml(this.format)
+            this.setFormatHtml(this.formatHtml)
         }
-        
-        // _setTimeout: function (callback) {
-        //     setTimeout(callback)
-        // }
+
     }
 
 
     return {
-        deploy: function (obj) {
-            var $el = obj.$el,
-                date = obj.date,
-                format = obj.format,
-                callback = obj.endcallback || obj.fixcallback;
-            new _countdown($el,date,format,callback)
+        deploy: function () {
+            var $el,date,format,dateType,leadTime,callback
+            for(var i=0; i<arguments.length; i++) {
+                $el = arguments[i].$el;
+                date = arguments[i].date;
+                format = arguments[i].format;
+                dateType = arguments[i].dateType;
+                leadTime = arguments[i].leadTime;
+                callback = arguments[i].callback;
+                new _countdown($el,date,format,dateType,leadTime,callback)
+            }
+
         }
     }
 })()
-
 
 
 
@@ -197,6 +211,9 @@ var countdown = (function() {
 *
 *
 * */
+
+
+
 
 
 

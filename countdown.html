@@ -1,28 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title></title>
-	<style>
-		.countdown {
-			border: 1px solid red;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+    </style>
 </head>
 <body>
-	<div class="countdown"></div>
-	<div id="getting-started1"></div>
+<div style="border:1px solid red">
+    countdown.js
+    <div>本地时间</div>
+    <div class="countdown"></div>
+    <br>
+    <div>服务器时间</div>
+    <div class="countdown2"></div>
+</div>
+<br>
+<br>
+<div>Jquery.countdown.js</div>
+<div id="getting-started1"></div>
 </body>
 <script src="./jquery-3.1.1.js"></script>
 <script src="./countdown.js"></script>
 <script src="./jquery.countdown.min.js"></script>
 <script>
     $("#getting-started1")
-        .countdown("2017/12/12 12:12:12",function(event) {
+        .countdown("2017/12/12 12:12:12", function (event) {
             $(this).html(
                 event.strftime('%Y 年 %m 月 %n 日 %H 小时 %M 分钟 %S 秒')
             );
-            $('.jj').css('color','red')
         });
+
+    countdown.deploy(
+        {
+            $el: $(".countdown"),
+            date: '2017/12/12 12:12:12',
+            format: '<span>%Y</span> 年 %m 月 %n 日 %H 小时 %M 分钟 %S 秒',       // 倒计时格式 时间设置中间可以写html
+            dateType: 'localDate',       // 倒计时的时间类型 ：serverDate（服务器时间） localDate（本地时间） 默认本地时间
+            leadTime: 0,                    // 设置提前多久执行函数   默认为 0
+            callback: function () {           // endcallback 结束时执行的函数  fixcallback(600) 剩余600秒时执行的函数
+                alert('11')
+            }
+        },
+        {
+            $el: $(".countdown2"),
+            date: '2017/12/12 12:12:12',
+            format: '%Y 年 %m 月 %n 日 %H 小时 %M 分钟 %S 秒',       // 倒计时格式 时间设置中间可以写html
+            dateType: 'serverDate',       // 倒计时的时间类型 ：serverDate（服务器时间） localDate（本地时间） 默认本地时间
+            leadTime: 0,                    // 设置提前多久执行函数   默认为 0
+            callback: function () {           // endcallback 结束时执行的函数  fixcallback(600) 剩余600秒时执行的函数
+                alert('11')
+            }
+        }
+    )
 </script>
 </html>
+<!--
+	advancedcallback(){
+		advanced: 100       // 这是提前的时间
+	}
+-->
