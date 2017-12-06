@@ -107,7 +107,7 @@ countdown.deploy(
 ```
 if(this.myCount) this.myCount.destroy();
 
-this.myCount = countdown.change(
+this.myCount = countdown_change.change(
     {
         $el: $(".countdown"),                                  // （必选）选择器
         date: '2020/12/12 12:00',                              // （必选）到达日期
