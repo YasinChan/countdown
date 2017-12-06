@@ -4,27 +4,26 @@
 * 1.使用系统时间；
 * 2.可以选择使用本地时间或者系统时间
 * 3.
+*
+*
+* 区别之处在于：当需要在当前页面修改参数时，需要 clearinterval 一下，这个方法中会返回这个对象，对象中有个destroy 方法，用来清除interval，具体使用方法是 给实例附一个值，然后在生成实例之前使用destroy 方法清除interval
 * */
 
 
-
-
-
-
-var countdown = (function() {
+var countdown_change = (function () {
     "use strict";
 
-    function _countdown($el,date,format,dateType,leadTime, callback){
+    function _countdown($el, date, format, dateType, leadTime, callback) {
         this.$el = $el;
         this.date = date;
         this.format = format;
-        this.dateType = dateType==undefined?'localDate':dateType;
-        this.leadTime = leadTime==undefined?0:leadTime;
+        this.dateType = dateType == undefined ? 'localDate' : dateType;
+        this.leadTime = leadTime == undefined ? 0 : leadTime;
         this.callback = callback;
         this.init();
     }
 
-    _countdown.prototype= {
+    _countdown.prototype = {
         init: function () {
             this.interval = null
             this.currentDate = null
@@ -34,7 +33,7 @@ var countdown = (function() {
             this.formatHtml = null
             this.parseDate(this.date)  // 解析后的时间
             this.getCurrentDate()       // 获取服务器时间
-            this.getTime(this.currentDate,this.standardDate) // 获取倒计时总共的秒数
+            this.getTime(this.currentDate, this.standardDate) // 获取倒计时总共的秒数
             this.getDistributeTime(this.totalSecTime)   // 分配时间，用以组合。
             this.getFormatHtml(this.format)   // 配置倒计时的 html 赋给 this.format
             this.setFormatHtml(this.formatHtml)     // 画html
@@ -66,9 +65,9 @@ var countdown = (function() {
         },
 
         getCurrentDate: function () {
-            if(this.dateType == 'localDate') {
+            if (this.dateType == 'localDate') {
                 this.currentDate = new Date()
-            }else {
+            } else {
                 this.currentDate = new Date($.ajax({async: false}).getResponseHeader("Date"));
             }
         },
@@ -77,7 +76,7 @@ var countdown = (function() {
             var currentTime = currentDate.getTime(),
                 setTime = setDate.getTime(),
                 totalTime = Math.ceil((setTime - currentTime) / 1e3);
-            if(totalTime <= 0) this.totalSecTime = 0;
+            if (totalTime <= 0) this.totalSecTime = 0;
             else this.totalSecTime = totalTime;
         },
 
@@ -102,46 +101,46 @@ var countdown = (function() {
             var directives = format.match(/%(-|!)?[A-Z]{1}(:[^;]+;)?/gi);
             var _formatHtml = this.format;
             var timeObj = this.distributeTime;
-            for(var i=0; i<directives.length; i++) {
+            for (var i = 0; i < directives.length; i++) {
                 switch (directives[i]) {
                     case '%Y':
-                        _formatHtml = _formatHtml.replace('%Y', timeObj.years<10?'0'+timeObj.years:timeObj.years);
+                        _formatHtml = _formatHtml.replace('%Y', timeObj.years < 10 ? '0' + timeObj.years : timeObj.years);
                         break;
                     case '%m':
-                        _formatHtml = _formatHtml.replace('%m', timeObj.months<10?'0'+timeObj.months:timeObj.months);
+                        _formatHtml = _formatHtml.replace('%m', timeObj.months < 10 ? '0' + timeObj.months : timeObj.months);
                         break;
                     case '%n':
-                        _formatHtml = _formatHtml.replace('%n', timeObj.daysToMonth<10?'0'+timeObj.daysToMonth:timeObj.daysToMonth);
+                        _formatHtml = _formatHtml.replace('%n', timeObj.daysToMonth < 10 ? '0' + timeObj.daysToMonth : timeObj.daysToMonth);
                         break;
                     case '%w':
-                        _formatHtml = _formatHtml.replace('%w', timeObj.weeks<10?'0'+timeObj.weeks:timeObj.weeks);
+                        _formatHtml = _formatHtml.replace('%w', timeObj.weeks < 10 ? '0' + timeObj.weeks : timeObj.weeks);
                         break;
                     case '%W':
-                        _formatHtml = _formatHtml.replace('%W', timeObj.daysToWeek<10?'0'+timeObj.daysToWeek:timeObj.daysToWeek);
+                        _formatHtml = _formatHtml.replace('%W', timeObj.daysToWeek < 10 ? '0' + timeObj.daysToWeek : timeObj.daysToWeek);
                         break;
                     case '%d':
-                        _formatHtml = _formatHtml.replace('%d', timeObj.days<10?'0'+timeObj.days:timeObj.days);
+                        _formatHtml = _formatHtml.replace('%d', timeObj.days < 10 ? '0' + timeObj.days : timeObj.days);
                         break;
                     case '%H':
-                        _formatHtml = _formatHtml.replace('%H', timeObj.hours<10?'0'+timeObj.hours:timeObj.hours);
+                        _formatHtml = _formatHtml.replace('%H', timeObj.hours < 10 ? '0' + timeObj.hours : timeObj.hours);
                         break;
                     case '%M':
-                        _formatHtml = _formatHtml.replace('%M', timeObj.minutes<10?'0'+timeObj.minutes:timeObj.minutes);
+                        _formatHtml = _formatHtml.replace('%M', timeObj.minutes < 10 ? '0' + timeObj.minutes : timeObj.minutes);
                         break;
                     case '%S':
-                        _formatHtml = _formatHtml.replace('%S', timeObj.seconds<10?'0'+timeObj.seconds:timeObj.seconds);
+                        _formatHtml = _formatHtml.replace('%S', timeObj.seconds < 10 ? '0' + timeObj.seconds : timeObj.seconds);
                         break;
                     case '%D':
-                        _formatHtml = _formatHtml.replace('%D', timeObj.totalDays<10?'0'+timeObj.totalDays:timeObj.totalDays);
+                        _formatHtml = _formatHtml.replace('%D', timeObj.totalDays < 10 ? '0' + timeObj.totalDays : timeObj.totalDays);
                         break;
                     case '%I':
-                        _formatHtml = _formatHtml.replace('%I', timeObj.totalHours<10?'0'+timeObj.totalHours:timeObj.totalHours);
+                        _formatHtml = _formatHtml.replace('%I', timeObj.totalHours < 10 ? '0' + timeObj.totalHours : timeObj.totalHours);
                         break;
                     case '%N':
-                        _formatHtml = _formatHtml.replace('%N', timeObj.totalMinutes<10?'0'+timeObj.totalMinutes:timeObj.totalMinutes);
+                        _formatHtml = _formatHtml.replace('%N', timeObj.totalMinutes < 10 ? '0' + timeObj.totalMinutes : timeObj.totalMinutes);
                         break;
                     case '%T':
-                        _formatHtml = _formatHtml.replace('%T', this.totalSecTime<10?'0'+this.totalSecTime:this.totalSecTime);
+                        _formatHtml = _formatHtml.replace('%T', this.totalSecTime < 10 ? '0' + this.totalSecTime : this.totalSecTime);
                         break;
                 }
             }
@@ -152,25 +151,25 @@ var countdown = (function() {
             this.$el.html(format);
         },
 
-        _setInterval: function(){
+        _setInterval: function () {
             var _this = this
-            this.interval = setInterval(function(){
+            this.interval = setInterval(function () {
                 _this.updateCountdown()
-            },1000)
+            }, 1000)
         },
 
-        // destroy: function(){
-        //     if(this.interval) clearInterval(this.interval);
-        // },
+        destroy: function () {                      // 用于在当前页面每次需要修改参数时，清除上次的interval
+            if (this.interval) clearInterval(this.interval);
+        },
 
         updateCountdown: function () {
-            if(this.totalSecTime == this.leadTime) {
-                if(this.callback != undefined) {
+            if (this.totalSecTime == this.leadTime) {
+                if (this.callback != undefined) {
                     this.callback();
-                    this.totalSecTime = this.getTime(this.getCurrentDate(),this.standardDate)
+                    this.totalSecTime = this.getTime(this.getCurrentDate(), this.standardDate)
                 }
             }
-            if(this.totalSecTime == 0) {
+            if (this.totalSecTime == 0) {
                 clearInterval(this.interval)
                 return
             }
@@ -184,22 +183,18 @@ var countdown = (function() {
 
 
     return {
-        deploy: function () {
+        change: function (obj) {
             var $el,date,format,dateType,leadTime,callback
-            for(var i=0; i<arguments.length; i++) {
-                $el = arguments[i].$el;
-                date = arguments[i].date;
-                format = arguments[i].format;
-                dateType = arguments[i].dateType;
-                leadTime = arguments[i].leadTime;
-                callback = arguments[i].callback;
-                new _countdown($el,date,format,dateType,leadTime,callback)
-            }
-
+            $el = obj.$el;
+            date = obj.date;
+            format = obj.format;
+            dateType = obj.dateType;
+            leadTime = obj.leadTime;
+            callback = obj.callback;
+            return new _countdown($el, date, format, dateType, leadTime, callback)
         }
     }
 })()
-
 
 
 /*

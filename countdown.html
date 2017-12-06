@@ -4,25 +4,42 @@
     <meta charset="UTF-8">
     <title></title>
     <style>
+        .container {
+            width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            font-size: 26px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-<div style="border:1px solid red; font-family: serif;">
-    countdown.js
-    <div>本地时间</div>
-    <div class="countdown"></div>
+<div class="container">
+    <div class="header">countdown.js VS Jquery.countdown.js</div>
+    <div style="border:1px solid red; font-family: serif;">
+        countdown.js
+        <div>本地时间</div>
+        <div class="countdown"></div>
+        <br>
+        <div>服务器时间</div>
+        <div class="countdown2"></div>
+    </div>
     <br>
-    <div>服务器时间</div>
-    <div class="countdown2"></div>
+    <br>
+    <div>Jquery.countdown.js</div>
+    <div id="getting-started1"></div>
+    <br>
+    <br>
+    <div>countdown_for_adaptable.js</div>
+    <input type="text" placeholder="XXXX/XX/XX XX:XX:XX" value="2020/12/12 12:12:12">
+    <div class="changecountdown"></div>
 </div>
-<br>
-<br>
-<div>Jquery.countdown.js</div>
-<div id="getting-started1"></div>
 </body>
 <script src="./jquery-3.1.1.js"></script>
 <script src="./countdown.js"></script>
 <script src="./jquery.countdown.min.js"></script>
+<script src="./countdown_for_adaptable.js"></script>
 <script>
     $("#getting-started1")
         .countdown("2017/12/12 12:12:12", function (event) {
@@ -39,24 +56,58 @@
             dateType: 'localDate',       // 倒计时的时间类型 ：serverDate（服务器时间） localDate（本地时间） 默认本地时间
             leadTime: 0,                    // 设置提前多久执行函数   默认为 0
             callback: function () {           // endcallback 结束时执行的函数  fixcallback(600) 剩余600秒时执行的函数
-                alert('11')
+
             }
         },
         {
             $el: $(".countdown2"),
             date: '2017/12/12 12:12:12',
-            format: '%Y 年 %m 月 %n 日 %H 小时 %M 分钟 %S 秒',       // 倒计时格式 时间设置中间可以写html
+            format: '<span>%Y</span> 年 %m 月 %n 日 %H 小时 %M 分钟 %S 秒',       // 倒计时格式 时间设置中间可以写html
             dateType: 'serverDate',       // 倒计时的时间类型 ：serverDate（服务器时间） localDate（本地时间） 默认本地时间
             leadTime: 0,                    // 设置提前多久执行函数   默认为 0
             callback: function () {           // endcallback 结束时执行的函数  fixcallback(600) 剩余600秒时执行的函数
-                alert('11')
+
             }
         }
     )
+
+
+    this.myCount = countdown_change.change(
+        {
+            $el: $(".changecountdown"),
+            date: '2020/12/12 12:12:12',
+            format: '<span>%Y</span> 年 %m 月 %n 日 %H 小时 %M 分钟 %S 秒',       // 倒计时格式 时间设置中间可以写html
+            dateType: 'localDate',       // 倒计时的时间类型 ：serverDate（服务器时间） localDate（本地时间） 默认本地时间
+            leadTime: 0,                    // 设置提前多久执行函数   默认为 0
+            callback: function () {           // endcallback 结束时执行的函数  fixcallback(600) 剩余600秒时执行的函数
+
+            }
+        }
+    )
+    var _this = this;
+    $('input').on('change',function () {
+        var changedate = $('input').val();
+        if(_this.myCount) _this.myCount.destroy();
+
+        _this.myCount = countdown_change.change(
+            {
+                $el: $(".changecountdown"),
+                date: changedate,
+                format: '<span>%Y</span> 年 %m 月 %n 日 %H 小时 %M 分钟 %S 秒',       // 倒计时格式 时间设置中间可以写html
+                dateType: 'localDate',       // 倒计时的时间类型 ：serverDate（服务器时间） localDate（本地时间） 默认本地时间
+                leadTime: 0,                    // 设置提前多久执行函数   默认为 0
+                callback: function () {           // endcallback 结束时执行的函数  fixcallback(600) 剩余600秒时执行的函数
+
+                }
+            }
+        )
+    })
+
+
 </script>
 </html>
 <!--
-	advancedcallback(){
-		advanced: 100       // 这是提前的时间
-	}
+    advancedcallback(){
+        advanced: 100       // 这是提前的时间
+    }
 -->

@@ -1,13 +1,13 @@
 # countdown
 
 #### 简介：
-在研读了 Jquery.countdown.js 后，封装了此插件
+在研读了 Jquery.countdown.js 后，封装了 countdown.js
 可以选择使用服务器时间或本地时间，优化了性能
 
 ----
 
 #### 依赖：
-需要 jquery.js
+Jquery.js
 
 ----
 
@@ -89,9 +89,36 @@ countdown.deploy(
 
 #### 另外
   可以给每个字符设置一个<span> 或者 <div> 添加class给每个设置单独的样式 比如：
+
 ```
  format: '<span class="yyyy">%Y</span> <span class="year">年</span> %m 月 %n 日 %H 小时 %M 分钟 %S 秒'
 ```
  这样就可以单独设置 .yyyy 和 .year 的样式了
 
+ ----
 
+ #### *关于countdown_for_adaptable.js
+
+ 这个插件是用来解决当需要在当前页面修改参数时无法清除 setInterval 的值的情况。
+ 举个例子，比如当前页面有个日期选择器，可以选择一个日期然后对应的倒计时也相应发生改变，此时就需要用到这个插件了。
+
+ 具体使用与上面类似
+
+```
+if(this.myCount) this.myCount.destroy();
+
+this.myCount = countdown.change(
+    {
+        $el: $(".countdown"),                                  // （必选）选择器
+        date: '2020/12/12 12:00',                              // （必选）到达日期
+        format: '%Y 年 %m 月 %n 日 %H 小时 %M 分钟 %S 秒',        // （必选）倒计时格式 时间设置中间可以写html
+        dateType: 'serverDate',                                // （可选）倒计时的时间类型 ：serverDate（服务器时间） localDate（本地时间） 默认本地时间
+        leadTime: 0,                                           // （可选）设置提前多久执行函数   默认为 0
+        callback: function () {                                // （可选）设置回调函数，配合 leadTime 使用
+            alert('11')
+        }
+    }
+)
+```
+这个 destroy 是暴露出来的一个用来清除interval 的方法。
+具体可以参考我的案例 [https://yasinchan.com/countdown/countdown.html](https://yasinchan.com/countdown/countdown.html)
