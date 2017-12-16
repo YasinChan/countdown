@@ -166,10 +166,11 @@ var countdown_change = (function () {
             if (this.totalSecTime == this.leadTime) {
                 if (this.callback != undefined) {
                     this.callback();
-                    this.totalSecTime = this.getTime(this.getCurrentDate(), this.standardDate)
+                    this.getCurrentDate()
+                    this.totalSecTime = this.getTime(this.currentDate,this.standardDate)
                 }
             }
-            if (this.totalSecTime == 0) {
+            if (!this.totalSecTime) {
                 clearInterval(this.interval)
                 return
             }
