@@ -42,7 +42,7 @@
 <script src="./countdown_for_adaptable.js"></script>
 <script>
     $("#getting-started1")
-        .countdown("2017/12/12 12:12:12", function (event) {
+        .countdown("2019/02/05 00:00:00", function (event) {
             $(this).html(
                 event.strftime('%Y 年 %m 月 %n 日 %H 小时 %M 分钟 %S 秒')
             );
@@ -51,7 +51,7 @@
     countdown.deploy(
         {
             $el: $(".countdown"),
-            date: '2017/12/12 12:12:12',
+            date: '2019/02/05 00:00:00',
             format: '<span>%Y</span> 年 %m 月 %n 日 %H 小时 %M 分钟 %S 秒',       // 倒计时格式 时间设置中间可以写html
             dateType: 'localDate',       // 倒计时的时间类型 ：serverDate（服务器时间） localDate（本地时间） 默认本地时间
             leadTime: 0,                    // 设置提前多久执行函数   默认为 0
@@ -61,7 +61,7 @@
         },
         {
             $el: $(".countdown2"),
-            date: '2017/12/12 12:12:12',
+            date: '2019/02/05 00:00:00',
             format: '<span>%Y</span> 年 %m 月 %n 日 %H 小时 %M 分钟 %S 秒',       // 倒计时格式 时间设置中间可以写html
             dateType: 'serverDate',       // 倒计时的时间类型 ：serverDate（服务器时间） localDate（本地时间） 默认本地时间
             leadTime: 0,                    // 设置提前多久执行函数   默认为 0
