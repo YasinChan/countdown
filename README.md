@@ -120,5 +120,5 @@ this.myCount = countdown_change.change(
     }
 )
 ```
-这个 destroy 是暴露出来的一个用来清除interval 的方法。
+destroy() 是暴露出来的一个用来清除interval 的方法。
 具体可以参考我的案例 [https://yasinchan.com/countdown/countdown.html](https://yasinchan.com/countdown/countdown.html)
